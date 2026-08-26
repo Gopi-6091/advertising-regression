@@ -1,0 +1,78 @@
+# 🚀 Data Science Portfolio — Future Roadmap
+
+Goal: Build **3 progressively stronger projects** that demonstrate job readiness.
+
+## 🟢 Project 1 — Fundamentals: Regression
+
+**Advertising Spend → Sales**
+
+Focus:
+- Data audit & cleaning
+- EDA & visualization
+- Simple & multiple linear regression
+- Train/test split
+- MAE, RMSE, R²
+- Residuals & assumptions
+- Correlation vs causation
+- Business interpretation
+
+**Target:** Complete in ~4–6 focused hours.
+
+---
+
+## 🟠 Project 2 — Real-World Machine Learning
+
+**Messy business dataset + meaningful prediction problem**
+
+Focus:
+- Real-world messy data
+- Missing & categorical data
+- Outliers & data quality
+- Feature engineering
+- Baseline model
+- Multiple ML algorithms
+- Cross-validation
+- Hyperparameter tuning
+- Model comparison
+- Error analysis
+- Business recommendations
+
+**Goal:** Demonstrate practical end-to-end data science skills.
+
+---
+
+## 🔴 Project 3 — Production / MLOps
+
+**Real-world ML problem → Deployable application**
+
+Focus:
+- Production-quality data pipeline
+- Advanced feature engineering
+- Model training & validation
+- Experiment tracking
+- Model serialization
+- **Streamlit** application
+- **Docker** containerization
+- API / inference pipeline
+- Deployment
+- Monitoring concepts
+- Reproducibility & documentation
+
+**Goal:** Demonstrate that I can take an ML model from
+**data → model → application → deployment**.
+
+---
+
+## 🎯 Portfolio Progression
+
+```text
+Project 1
+Fundamentals
+    ↓
+Project 2
+Real-World ML
+    ↓
+Project 3
+Production + MLOps
+    ↓
+Job-Ready Portfolio
