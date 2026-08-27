@@ -44,7 +44,7 @@ Predict sales using advertising expenditure.
 
 This is observational data.
 
-A regression model can identify associations and make predictions, but it does not automatically prove that increasing advertising expenditure causes sales to increase.
+Regression can identify associations and make predictions, but it does not automatically prove that increasing advertising expenditure causes sales to increase.
 
 A predictive model also does not automatically determine the optimal advertising budget.
 
@@ -62,17 +62,9 @@ https://trevorhastie.github.io/ISLR/data.html
 
 The dataset contains 200 observations across different markets.
 
-The observations are not sequential time measurements, so we frame this as a **cross-sectional regression problem**, not a time-series forecasting problem.
+The observations are not sequential time measurements, so this is framed as a **cross-sectional regression problem**, not a time-series forecasting problem.
 
-### Actual columns observed
-
-- `Unnamed: 0`
-- `TV`
-- `radio`
-- `newspaper`
-- `sales`
-
-### Current interpretation
+### Columns
 
 | Column | Role | Meaning |
 |---|---|---|
@@ -107,7 +99,7 @@ The exact units of the advertising budgets should be documented from the origina
 
 Dependencies are recorded in `requirements.txt`.
 
-`.venv/` must not be committed to Git.
+`.venv/` is excluded from Git.
 
 ---
 
@@ -129,41 +121,30 @@ advertising-regression/
 ├── .gitignore
 └── .venv/
 
-.gitignore includes:
 
 .venv/
 __pycache__/
 .ipynb_checkpoints/
 
-The raw dataset remains unchanged.
+5. Data Audit & Cleaning
+Dataset Structure
 
-5. Current Project State
-✅ Completed
-Business Understanding
+Confirmed:
 
-    Defined business problem
-    Defined business objective
-    Defined ML objective
-    Identified target
-    Identified predictors
-    Distinguished prediction, correlation, causation, and optimization
-    Established cross-sectional rather than time-series framing
+    200 rows
+    5 columns
+    4 numerical business variables:
+        TV
+        radio
+        newspaper
+        sales
+    1 identifier-like column:
+        Unnamed: 0
 
-Environment
+All columns contain 200 non-null values.
+Data Quality Checks
 
-    Created GitHub repository
-    Created Codespace
-    Created .venv
-    Installed dependencies
-    Created project directories
-    Created requirements.txt
-    Created .gitignore
-    Added dataset
-    Created notebook
-    Selected .venv kernel
-    Successfully loaded dataset
-
-Data Audit
+Completed:
 
     Inspected first five rows
     Checked dataset shape
@@ -177,38 +158,35 @@ Data Audit
     Checked for obvious negative values
     Checked original dataset documentation
 
-Confirmed Findings
+Findings
 
-    200 rows
-    5 columns
-    4 numerical business variables:
-        TV
-        radio
-        newspaper
-        sales
-    1 identifier-like column:
-        Unnamed: 0
-    All columns contain 200 non-null values
     No missing values detected
     No duplicate rows detected
+    No obvious data-entry errors found
     Advertising variables represent advertising budgets
     sales represents product sales
     Observations represent different markets
 
-Cleaning Assessment
+Identifier Assessment
 
-    Unnamed: 0 identified as an observation identifier rather than a meaningful business predictor
-    Unnamed: 0 will be excluded from regression features
-    Raw CSV remains unchanged
-    No observations were removed
-    No values were modified
-    No evidence of data-entry errors was found
+Unnamed: 0 was identified as an observation/index identifier rather than a meaningful business predictor.
 
-Univariate EDA
+Decision:
 
-Histograms with KDE curves and boxplots were used to investigate the distributions.
+    Exclude Unnamed: 0 from regression features
+    Keep the raw CSV unchanged
+    Do not modify or remove observations
 
-Observed distributions:
+Cleaning Principle
+
+Observe → Investigate → Reason → Decide → Document
+
+An IQR-identified outlier is not automatically a data error and should not automatically be removed.
+6. Exploratory Data Analysis
+Univariate Analysis
+
+Histograms with KDE curves and boxplots were used to investigate distributions.
+Observed distributions
 
     TV: multimodal / non-normal appearance
     Radio: relatively flat distribution
@@ -237,49 +215,41 @@ The two potential newspaper outliers were investigated using their complete obse
 No obvious data-entry errors or implausible values were identified.
 
 Decision: retain both observations.
-Current Cleaning Principle
+7. Bivariate & Multivariate EDA
+TV Advertising vs Sales
 
-Observe → Investigate → Reason → Decide → Document
+The scatter plot shows a clear positive association between TV advertising expenditure and sales.
 
-An IQR-identified outlier is not automatically a data error and should not automatically be removed.
-6. EDA Findings
-Bivariate Analysis
-
-Scatterplots were used to investigate the relationship between each advertising channel and sales.
-TV → Sales
-
-    Clear positive association
     Approximately linear relationship
     Relatively strong visual relationship
-    Increasing spread at higher TV expenditure, creating a funnel-shaped pattern
+    Increasing spread at higher TV expenditure
+    Funnel-shaped residual pattern is visible
 
-Radio → Sales
+Radio Advertising vs Sales
 
-    Clear positive association
+The scatter plot shows a clear positive association between radio advertising expenditure and sales.
+
     Approximately linear relationship
     Relatively strong visual relationship
-    Increasing spread at higher radio expenditure, creating a funnel-shaped pattern
+    Increasing spread at higher radio expenditure
+    Funnel-shaped pattern is visible
 
-Newspaper → Sales
+Newspaper Advertising vs Sales
+
+The scatter plot shows a weak and less clearly defined relationship between newspaper advertising expenditure and sales.
 
     Slight positive association
-    Much weaker relationship than TV and radio
-    No clearly defined linear pattern
-    Points are substantially more scattered
+    Points are widely scattered
+    No strong linear pattern is visually apparent
     Increasing spread at higher newspaper expenditure
+    Relationship is substantially weaker than TV and radio
 
 These are observational patterns and do not establish causation.
-Correlation Analysis
+8. Correlation Analysis
 
 Pearson correlation was used to quantify the strength and direction of linear relationships.
 
-Correlation ranges from -1 to +1:
-
-    +1 → perfect positive linear relationship
-    0 → no linear relationship
-    -1 → perfect negative linear relationship
-
-Correlation with Sales
+Correlation ranges from -1 to +1.
 Predictor	Correlation with Sales
 TV	0.782
 Radio	0.576
@@ -294,105 +264,67 @@ Important
 
 Correlation ≠ Causation
 
-A high correlation does not prove that one variable causes another.
+Because this is observational data, correlations should be interpreted as associations rather than causal effects.
 
-Because this is observational data, these correlations should be interpreted as associations, not causal effects.
-
-Correlation also measures linear association. A correlation close to zero does not necessarily mean that no relationship exists; a non-linear relationship may still be present.
-Correlation Between Predictors
-
-Pairwise correlations between advertising predictors:
+Correlation measures linear association. A correlation close to zero does not necessarily mean that no relationship exists.
+9. Predictor Correlations
 Predictor Pair	Correlation
 TV ↔ Radio	0.05
 TV ↔ Newspaper	0.06
 Radio ↔ Newspaper	0.35
 Interpretation
 
-    TV has almost no linear association with either radio or newspaper.
+    TV has almost no linear association with radio or newspaper.
     Radio and newspaper have a weak positive association.
-    There is no evidence of strong pairwise correlation among the predictors.
+    No strong pairwise predictor correlation was observed.
 
-However, pairwise correlation alone cannot fully rule out multicollinearity.
+Pairwise correlation alone cannot fully rule out multicollinearity.
 
-Multicollinearity will be assessed more formally later using VIF during regression diagnostics.
-Multivariate EDA
+Multicollinearity will be assessed later using VIF.
+10. Initial EDA Hypotheses
 
-A pairplot was used to visualize relationships among all numerical variables simultaneously.
+Based on scatterplots, correlations, and the pairplot:
 
-The pairplot generally agrees with the correlation results:
+    TV: expected to have a strong positive association with sales.
+    Radio: expected to have a positive association with sales.
+    Newspaper: expected to have a weaker positive association with sales.
 
-    TV shows the clearest relationship with sales.
-    Radio shows a noticeable positive relationship with sales.
-    Newspaper shows the weakest and most scattered relationship.
-    Predictor-to-predictor relationships are generally weak.
-
-Initial EDA Hypotheses
-
-Based on the scatterplots, correlation analysis, and pairplot:
-
-    TV: Expected to have a strong positive association with sales.
-    Radio: Expected to have a positive association with sales.
-    Newspaper: Expected to have a weaker positive association with sales.
-
-These are exploratory hypotheses based on observed patterns.
+These are exploratory hypotheses.
 
 They do not establish causation.
-7. Simple Linear Regression — TV → Sales
+11. Simple Linear Regression — TV → Sales
 
-Simple linear regression was used first to understand the relationship between TV advertising expenditure and sales before moving to multiple regression.
-Regression Equation
+Simple linear regression was fitted first to understand the relationship between TV advertising expenditure and sales.
+Regression equation
 
-The fitted model is:
+Saleŝ = 7.0326 + 0.04754(TV)
 
-Sales^=7.0326+0.04754(TV)
-Coefficient Interpretation
+Coefficients
 
     Intercept = 7.0326
     TV coefficient = 0.04754
 
-The TV coefficient means:
+TV coefficient interpretation
 
-    For a 1-unit increase in TV advertising expenditure, predicted sales increase by approximately 0.0475 units, on average.
+For a 1-unit increase in TV advertising expenditure, predicted sales increase by approximately 0.0475 sales units, on average.
 
 This represents an association, not a causal effect.
-Intercept Interpretation
+Intercept
 
 The intercept represents predicted sales when TV = 0.
 
 However, TV = 0 is not represented in the observed data, so the intercept has limited direct business interpretation.
+12. Hypothesis Testing — TV Coefficient
+Statistical question
 
-The intercept is still mathematically necessary to define the regression line.
-Predictions and Residuals
-
-Predictions were generated using:
-
-y_pred = model.predict(X)
-
-A residual is defined as:
-
-Residual=Actual−Predicted
-
-Residuals represent the difference between the observed sales value and the value predicted by the regression line.
-
-The scatterplot showed increasing spread in the observations at higher TV expenditure, producing a funnel-shaped pattern.
-
-This will be investigated formally during regression diagnostics.
-8. Hypothesis Testing — TV Coefficient
-
-The statistical question is:
-
-    Is the true population slope for TV different from zero?
-
+Is the true population slope for TV different from zero?
 Hypotheses
 
-H0:β1=0
+H₀: β₁ = 0
 
-The true population slope is zero; there is no linear association between TV advertising expenditure and sales.
+H₁: β₁ ≠ 0
 
-H1:β1≠0
-
-The true population slope differs from zero.
-Regression Results
+Results
 Statistic	TV
 Coefficient	0.0475
 Standard Error	0.003
@@ -407,70 +339,219 @@ Because the p-value is below conventional significance levels, we reject the nul
 
 There is strong statistical evidence of a positive linear association between TV advertising expenditure and sales.
 
-This result does not establish that TV advertising causes sales to increase.
-Statistical Significance vs Predictive Performance
+This does not establish causation.
+13. Model Evaluation — Simple Regression
 
-Statistical significance and predictive performance answer different questions.
+A train/test split was used to evaluate performance on unseen observations.
+Split
 
-    Hypothesis testing asks whether the coefficient provides evidence of a non-zero population association.
-    Model evaluation asks how accurately the model predicts unseen observations.
+    80% training
+    20% testing
+    random_state = 42
 
-Predictive performance will be evaluated separately using train/test evaluation and metrics such as MAE, MSE, RMSE, and R².
-9. Current Open Questions
-Column Naming
+TV-only model performance
+Metric	Train	Test
+MAE	2.583	2.444
+MSE	10.604	10.205
+RMSE	3.256	3.194
+R²	0.591	0.677
+Interpretation
 
-The original dataset uses:
+    Training and test performance are similar.
+    No obvious evidence of overfitting is visible from this split.
+    Test RMSE is approximately 3.19 sales units.
+    Test R² is approximately 0.677.
+    Approximately 67.7% of the variation in test-set sales is explained by the TV-only model.
 
-    TV
-    radio
-    newspaper
-    sales
+One train/test split is not sufficient to make a strong generalization claim.
+14. Multiple Linear Regression
 
-We have not yet decided whether column names should be standardized.
+Because three advertising channels are available, multiple linear regression was used to model sales using:
 
-Any renaming should be deliberate and documented.
-Sampling
+TV + Radio + Newspaper
 
-We know the dataset contains 200 markets.
+Model equation
 
-We have not established the sampling method used to select those markets.
+Saleŝ =
+2.9791
++ 0.0447(TV)
++ 0.1892(Radio)
++ 0.0028(Newspaper)
 
-Do not assume random sampling without evidence.
-Model Evaluation
+Coefficients
+Predictor	Coefficient
+TV	0.0447
+Radio	0.1892
+Newspaper	0.0028
+Coefficient interpretation
 
-The simple regression model has been fitted and statistically evaluated, but its performance on unseen observations has not yet been assessed.
+TV
 
-Next we need to investigate:
+A 1-unit increase in TV expenditure is associated with approximately 0.0447 higher predicted sales, holding radio and newspaper expenditure constant.
 
-    Train/test split
+Radio
+
+A 1-unit increase in radio expenditure is associated with approximately 0.1892 higher predicted sales, holding TV and newspaper expenditure constant.
+
+Newspaper
+
+The newspaper coefficient requires statistical interpretation before deciding whether the variable provides useful evidence after accounting for TV and radio.
+
+These coefficients represent associations, not causal effects.
+15. Multiple Regression — Predictive Evaluation
+Performance
+Metric	Train	Test
+MAE	1.198	1.461
+MSE	2.705	3.174
+RMSE	1.645	1.782
+R²	0.896	0.899
+Comparison with TV-only model
+Model	Test RMSE	Test R²
+TV only	3.194	0.677
+TV + Radio + Newspaper	1.782	0.899
+Interpretation
+
+Adding Radio and Newspaper substantially improved predictive performance on the test set.
+
+    RMSE improved from 3.194 → 1.782
+    R² improved from 0.677 → 0.899
+    Training and test performance remain relatively similar.
+    No obvious evidence of overfitting is visible from this split.
+
+However, the improvement should be assessed more robustly using cross-validation.
+16. OLS Statistical Analysis — Multiple Regression
+
+Statsmodels OLS was used to obtain statistical inference for the multiple regression model.
+Results
+Predictor	Coefficient	t-statistic	p-value	95% CI
+Intercept	2.9791	8.427	< 0.001	[2.281, 3.677]
+TV	0.0447	28.544	< 0.001	[0.042, 0.048]
+Radio	0.1892	19.518	< 0.001	[0.170, 0.208]
+Newspaper	0.0028	0.392	0.696	[-0.011, 0.017]
+Overall model
+
+    R² = 0.896
+    Adjusted R² = 0.894
+    F-statistic = 446.6
+    Prob(F-statistic) < 0.001
+
+Current interpretation
+
+TV and Radio show statistically significant positive associations with sales after accounting for the other predictors.
+
+Newspaper does not show statistically significant evidence of a linear association with sales after accounting for TV and Radio.
+
+The Newspaper p-value is 0.696, and its 95% confidence interval includes zero.
+
+This does not automatically mean Newspaper should be removed. Feature selection should consider predictive performance, statistical evidence, model simplicity, and cross-validation.
+17. Statistical Significance vs Predictive Performance
+
+These answer different questions.
+Statistical inference
+
+Asks:
+
+    Is there evidence that a population coefficient differs from zero?
+
+Tools include:
+
+    t-statistic
+    p-value
+    confidence interval
+    F-test
+
+Predictive evaluation
+
+Asks:
+
+    How well does the model predict unseen observations?
+
+Tools include:
+
     MAE
     MSE
     RMSE
     R²
-    Generalization to unseen data
+    Train/test evaluation
+    Cross-validation
 
-10. 🔵 NEXT ACTION
+A statistically significant predictor is not automatically a practically important predictor.
 
-Begin Phase 6 — Model Evaluation.
+A predictive model can also be useful without every individual coefficient being statistically significant.
+18. Regression Metrics — Quick Reference
+MAE
 
-Next:
+Mean Absolute Error.
 
-    Split the data into training and test sets
-    Train the TV → Sales model on the training data
-    Generate predictions on the test data
-    Evaluate predictions using:
-        MAE
-        MSE
-        RMSE
-        R²
-    Understand why accuracy is not appropriate for regression
-    Compare training and test performance
+Measures the average absolute prediction error.
 
-Do not jump directly into multiple regression.
+Lower is better.
+MSE
 
-First evaluate how well the simple regression model generalizes to unseen data.
-11. Roadmap
+Mean Squared Error.
+
+Penalizes large errors more heavily.
+
+Lower is better.
+RMSE
+
+Root Mean Squared Error.
+
+Measures prediction error in the same units as the target.
+
+Lower is better.
+R²
+
+Coefficient of determination.
+
+Measures the proportion of variation in the target explained by the model.
+
+Higher is better.
+Current evaluation approach
+
+RMSE is used as the primary error metric, with MAE and R² providing additional context.
+19. OLS vs Machine Learning Models
+
+OLS provides both model estimation and statistical inference.
+
+For example:
+
+    coefficients
+    standard errors
+    t-statistics
+    p-values
+    confidence intervals
+
+Many machine-learning algorithms focus primarily on predictive performance rather than coefficient-based statistical inference.
+
+For models such as neural networks, tree ensembles, and boosting algorithms, evaluation typically focuses on:
+
+    test performance
+    cross-validation
+    error metrics
+    feature importance
+    permutation importance
+    SHAP or other interpretation methods where appropriate
+
+Statistical evaluation is still possible, but it is not necessarily based on OLS-style coefficient significance tests.
+20. Current Limitations
+
+Important limitations identified so far:
+
+    Dataset is observational.
+    Causal conclusions cannot be established from regression alone.
+    Sampling method is not established.
+    Only 200 observations are available.
+    One train/test split can produce split-dependent results.
+    Advertising budget units should not be assumed without documentation.
+    Regression assumptions have not yet been fully diagnosed.
+    Multicollinearity has not yet been formally assessed.
+    The model does not automatically determine an optimal advertising budget.
+
+21. Roadmap
 Phase 1 — Business Understanding
+
+Status: ✅ Complete
 
     Business problem
     Business objective
@@ -479,8 +560,9 @@ Phase 1 — Business Understanding
     Prediction vs causation vs optimization
     Cross-sectional vs time-series framing
 
-Status: ✅ Complete
 Phase 2 — Environment & Data
+
+Status: ✅ Complete
 
     Repository
     Codespace
@@ -489,8 +571,9 @@ Phase 2 — Environment & Data
     Dataset
     Notebook
 
-Status: ✅ Complete
 Phase 3 — Data Audit & Cleaning
+
+Status: ✅ Complete
 
     Structure
     Schema
@@ -501,10 +584,10 @@ Phase 3 — Data Audit & Cleaning
     Plausibility checks
     Outlier investigation
     Cleaning decisions
-    Final analytical interpretation
+
+Phase 4 — EDA
 
 Status: ✅ Complete
-Phase 4 — EDA
 
     Univariate analysis
     Distributions
@@ -513,23 +596,15 @@ Phase 4 — EDA
     Scatter plots
     Correlations
     Predictor correlations
-    Correlation heatmap
-    Multivariate relationships
+    Heatmap
     Pairplot
     Hypothesis formation
 
-Status: ✅ Complete
-Key EDA Findings
-
-    TV has the strongest positive linear association with sales (r = 0.782)
-    Radio has a moderate positive linear association with sales (r = 0.576)
-    Newspaper has a weak positive linear association with sales (r = 0.228)
-    Predictor pairwise correlations are generally weak
-    No strong pairwise predictor correlation was observed
-    TV and radio appear more strongly associated with sales than newspaper
-    These findings represent associations, not causal effects
-
 Phase 5 — Regression
+
+Status: 🟡 In Progress
+
+Completed:
 
     Simple linear regression
     Regression equation
@@ -538,46 +613,42 @@ Phase 5 — Regression
     Intercept
     Residuals
     Hypothesis testing
-    Null hypothesis
-    Alternative hypothesis
     t-statistic
     p-value
-    Statistical significance
     Confidence intervals
     Multiple linear regression
-    Compare models
+    Train/test evaluation
+    OLS multiple regression
+
+Remaining:
+
+    Fully interpret multiple regression coefficients
+    Assess whether Newspaper should remain in the model
+    Compare models more rigorously
+
+Phase 6 — Model Evaluation
 
 Status: 🟡 In Progress
-Completed in Phase 5
 
-    Fitted simple linear regression for TV → Sales
-    Interpreted intercept
-    Interpreted TV coefficient
-    Generated predictions
-    Introduced residuals
-    Performed hypothesis testing
-    Interpreted t-statistic
-    Interpreted p-value
-    Interpreted 95% confidence interval
-
-Remaining in Phase 5
-
-    Multiple linear regression
-    Compare simple vs multiple regression models
-    Interpret multiple regression coefficients
-
-Phase 6 — Evaluation
+Completed:
 
     Train/test split
+    Test predictions
     MAE
     MSE
     RMSE
     R²
-    Understand why accuracy is inappropriate
-    Evaluate generalization to unseen data
+    Train/test comparison
+    Simple vs multiple regression comparison
 
-Status: 🔵 Next
+Remaining:
+
+    Cross-validation
+    More robust model comparison
+
 Phase 7 — Diagnostics
+
+Status: ⬜ Not Started
 
     Linearity
     Independence
@@ -585,11 +656,13 @@ Phase 7 — Diagnostics
     Residual analysis
     Normality where relevant
     Multicollinearity
+    VIF
     Outliers
     Influential observations
 
-Status: ⬜ Not started
 Phase 8 — Business Interpretation
+
+Status: ⬜ Not Started
 
     Translate model results into business language
     Compare advertising channels
@@ -599,8 +672,9 @@ Phase 8 — Business Interpretation
     Discuss correlation vs causation
     Discuss limitations
 
-Status: ⬜ Not started
 Phase 9 — Portfolio & Interview
+
+Status: ⬜ Not Started
 
     Final notebook
     Final README
@@ -609,34 +683,32 @@ Phase 9 — Portfolio & Interview
     Strong interview answers
     Real-world improvements
 
-Status: ⬜ Not started
-12. Mentor Instructions
+22. Mentor Instructions
 
-When working on this project, act as my senior data scientist mentor and hiring-manager-level coach.
-Teaching Style
+The project is being developed using a senior data scientist / hiring-manager mindset.
+Teaching style
 
     Use Socratic questioning.
-    Let me attempt reasoning first.
-    Do not give the complete solution upfront.
+    Let reasoning come before solutions.
     Give hints before corrections.
-    Explain the "why" behind decisions.
+    Explain why decisions are made.
     Challenge weak assumptions.
     Keep the project hands-on.
-    Avoid giant code blocks.
-    Move forward only when I understand the current concept.
+    Avoid unnecessary giant code blocks.
+    Move forward only after understanding the current concept.
 
-Professional Mindset
+Professional mindset
 
-For important decisions, help me answer:
+For important decisions, ask:
 
     What did we observe?
     What does it mean?
-    What evidence supports our conclusion?
+    What evidence supports the conclusion?
     What decision should we make?
     What are the limitations?
-    How would I explain this to a hiring manager?
+    How would this be explained to a hiring manager?
 
-Core Distinctions
+Core distinctions
 
 Always distinguish:
 
@@ -649,99 +721,25 @@ Always distinguish:
     Causation
     Optimization
 
-Do not make causal claims from this observational dataset without appropriate justification.
-13. Learning Principles
+23. Learning Principle
 
-Start with:
+Use:
 
 Question → Data → Assumptions → Method → Evidence → Interpretation
-Univariate
-
-One variable.
-
-Example:
-
-Distribution of sales
-Bivariate
-
-Two variables.
-
-Example:
-
-TV vs Sales
-Multivariate
-
-Multiple variables considered together.
-
-Example:
-
-TV + Radio + Newspaper → Sales
-
-These describe the number of variables being analyzed, not whether variables are numeric or categorical.
-
-Variable type determines which analytical methods and visualizations are appropriate.
-EDA Quick Reference
-
-Question → Data Type → Appropriate Visualization → Evidence → Interpretation
-
-    Numerical distribution → Histogram / KDE
-    Potential outliers → Boxplot
-    Numerical X vs Numerical Y → Scatterplot
-    Linear relationship → Correlation
-    Multiple numerical variables → Heatmap / Pairplot
-    Categorical distribution → Count plot / Bar chart
-    Categorical X vs Numerical Y → Boxplot / Violin plot
-    Time-based data → Line chart
-    Geographic data → Map
-
-The workflow is reusable, but the exact visualizations depend on the data and analytical question.
-14. Interview Questions to Develop
-
-Do not answer these all at once.
-
-Introduce them when relevant during the project.
-
-    Why linear regression?
-    Why not a time-series model?
-    Why these features?
-    Why exclude Unnamed: 0?
-    What does a coefficient mean?
-    What does the intercept mean?
-    What is a null hypothesis?
-    What is an alternative hypothesis?
-    What is a p-value?
-    What does statistical significance mean?
-    Does correlation imply causation?
-    How do you know the model is good?
-    Why R²?
-    Why not accuracy?
-    What are the assumptions of linear regression?
-    What happens when assumptions are violated?
-    What is multicollinearity?
-    How would you detect outliers?
-    Can this model prove advertising causes sales?
-    How could the model support budget decisions?
-    What would you change with real company data?
-
-15. Session Continuation Rule
-
-When I return to this project:
-
-    Read this README.
-    Do not restart the project.
-    Identify the current unchecked task.
-    Ask me for my output/reasoning.
-    Review it with me.
-    Challenge misconceptions.
-    Teach the relevant concept.
-    Update the project status when a meaningful milestone is completed.
-    Do not jump ahead unnecessarily.
-
-Golden Rule
 
 The objective is not to finish the project quickly.
 
-The objective is to become capable of defending every important decision in the project.
-Current Checkpoint
+The objective is to become capable of defending every important analytical decision.
+24. Current Checkpoint
 
-Data Audit & Cleaning ✅ → EDA ✅ → Simple Regression + Hypothesis Testing ✅ → Model Evaluation 🔵
+Data Audit & Cleaning ✅ → EDA ✅ → Simple Regression + Hypothesis Testing ✅ → Train/Test Evaluation ✅ → Multiple Regression ✅ → OLS Statistical Analysis ✅ → Cross-Validation 🔵 → Diagnostics ⬜
+
+
+One important change I made deliberately: **Cross-validation is now the next step before we finalize the multiple-regression model.** We shouldn't jump straight to diagnostics yet, because we've already recognized that our current comparison depends on one random split.
+
+The next session can therefore start exactly here:
+
+> **Why should we use cross-validation when we already have a train/test split?**
+
+That will connect directly to the concern you raised earlier about different random splits producing different RMSE values.
+
