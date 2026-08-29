@@ -1,0 +1,408 @@
+## Stage 1 — Business Understanding
+
+### Q1. What is the business problem?
+
+**Answer:**
+The business wants to understand how advertising expenditure across TV, Radio,
+and Newspaper is associated with product sales, so the analysis can support
+better advertising-budget decisions.
+
+The data is observational, so we should not claim that advertising causes sales
+to increase.
+
+### Q2. What is the ML objective?
+
+**Answer:**
+Build a regression model to predict `sales` using `TV`, `radio`, and `newspaper`
+advertising expenditure.
+
+### Q3. Why linear regression?
+
+**Answer:**
+Sales is a continuous numerical target, and the predictors are numerical
+advertising expenditures. Linear regression allows us to model approximately
+linear relationships and provides interpretable coefficients.
+
+### Q4. Why regression instead of only correlation?
+
+**Answer:**
+Correlation measures the strength and direction of a pairwise linear
+association. Multiple regression allows us to estimate the association of one
+predictor with sales while holding the other predictors constant.
+
+It also gives us coefficients, confidence intervals, statistical tests, and
+predictions.
+
+### Key distinction
+
+Correlation → pairwise association
+
+Multiple regression → association of each predictor with the target while
+accounting for the other predictors
+
+Neither automatically establishes causation.
+
+
+## Stage 2 — Data Understanding & Data Quality
+
+### Q1. What dataset did you use?
+
+**Answer:**
+I used the Advertising dataset from the ISLR resource. It contains
+200 observations with TV, Radio, Newspaper, and Sales variables,
+plus an identifier-like column.
+
+### Q2. What data-quality checks did you perform?
+
+**Answer:**
+I checked:
+
+- Dataset structure and data types
+- Missing values
+- Duplicate observations
+- Descriptive statistics
+- Negative/impossible values
+- Potential outliers
+- Identifier columns
+
+### Q3. What did you find?
+
+**Answer:**
+There were no missing values or duplicate rows, and no obvious
+data-entry errors.
+
+Two Newspaper observations were flagged as potential IQR outliers.
+After investigating the complete observations, there was no evidence
+that they were erroneous, so they were retained.
+
+`Unnamed: 0` was identified as an identifier and excluded from the
+model features.
+
+### Q4. Why didn't you automatically remove outliers?
+
+**Answer:**
+An IQR outlier is not automatically a data error. I investigated the
+observations first. Since there was no evidence of an error or
+implausible value, I retained them and planned to assess their
+influence during regression diagnostics.
+
+### Q5. What would you do if you found a negative advertising value?
+
+**Answer:**
+Advertising expenditure logically cannot be negative, but I would not
+delete it immediately. I would first verify the source and investigate
+whether it was a data-entry or transformation error. If confirmed
+invalid and uncorrectable, I would then consider removing it and
+document the decision.
+
+### Key principle
+
+**Observe → Investigate → Reason → Decide → Document**
+
+Don't automatically delete observations just because they look unusual.
+
+
+## Stage 3 — EDA & Hypothesis Formation
+
+### Q1. How did you explore the relationships?
+
+**Answer:**
+I used bivariate analysis, scatterplots, correlation analysis, and a
+correlation heatmap.
+
+### Q2. What did you observe?
+
+**Answer:**
+- TV → strongest positive, approximately linear association with Sales.
+- Radio → positive association, weaker than TV.
+- Newspaper → weaker and more dispersed relationship with Sales.
+- Predictor correlations were relatively low.
+
+### Q3. Did you find multicollinearity?
+
+**Answer:**
+There was no evidence of strong **pairwise** multicollinearity based on
+the correlation matrix. However, correlation alone cannot rule out
+multicollinearity, so I planned to assess it formally using VIF.
+
+### Key distinction
+
+Correlation matrix → pairwise relationships
+
+VIF → formal assessment of multicollinearity
+
+
+## Stage 4 — Correlation vs Causation
+
+### Q1. Does strong TV-Sales correlation mean TV advertising causes sales to increase?
+
+**Answer:**
+No. The correlation shows a strong positive linear association, but this
+is observational data, so we cannot conclude causation.
+
+Other factors could influence both advertising expenditure and sales.
+
+### Q2. Does strong correlation prove linear regression is appropriate?
+
+**Answer:**
+No. It gives us a reason to investigate a linear model, but we still need
+to assess model assumptions using residual and regression diagnostics.
+
+### Key distinction
+
+Correlation → association
+
+Regression → estimates relationships / makes predictions
+
+Causation → requires stronger evidence and appropriate study design
+
+Strong correlation ≠ causation
+
+
+### Q1. Why did you start with simple regression?
+
+**Answer:**
+I started with simple linear regression to understand the relationship
+between an individual predictor and Sales before introducing multiple
+predictors.
+
+TV showed the strongest approximately linear association during EDA, so
+I used it as the first model.
+
+It provided an interpretable baseline before moving to multiple regression.
+
+### Q2. What does the TV coefficient of 0.0475 mean?
+
+**Answer:**
+A one-unit increase in TV advertising expenditure is associated with an
+estimated 0.0475-unit increase in predicted Sales, on average.
+
+This coefficient represents the slope of the regression line.
+
+### Regression equation
+
+Sales_hat = 7.0326 + 0.0475 × TV
+
+- 0.0475 → slope / TV coefficient
+- 7.0326 → intercept
+- TV → predictor
+- Sales_hat → predicted Sales
+
+### Important
+
+Because this is observational data:
+
+**Coefficient ≠ causal effect**
+
+Use:
+
+"associated with an increase"
+
+rather than:
+
+"causes an increase."
+
+### Key idea
+
+Simple regression helps us:
+
+- Understand one predictor's relationship with the target
+- Interpret the coefficient
+- Test statistical significance
+- Establish a baseline
+- Compare against the later multiple regression
+
+
+## Stage 6 — Hypothesis Testing
+
+### Q1. What were you testing?
+
+**Answer:**
+
+H₀: β₁ = 0
+H₁: β₁ ≠ 0
+
+We tested whether the population TV coefficient was statistically
+different from zero.
+
+### Q2. What does p < 0.001 mean?
+
+**Answer:**
+
+Assuming the null hypothesis is true, observing a test statistic this
+extreme or more extreme would be very unlikely.
+
+Therefore, we reject H₀.
+
+### Q3. What can we conclude?
+
+**Answer:**
+
+There is strong statistical evidence of a positive, non-zero linear
+association between TV advertising expenditure and Sales.
+
+### Q4. Does statistical significance mean TV is a good predictor?
+
+**Answer:**
+
+Not necessarily.
+
+Statistical significance answers an inference question:
+
+"Is the coefficient different from zero?"
+
+Predictive performance is evaluated using:
+
+- RMSE
+- MAE
+- R²
+- Cross-validation
+
+### Q5. Does statistical significance prove causation?
+
+**Answer:**
+
+No.
+
+The data is observational, so the result shows association, not
+causation.
+
+### Common p-value trap
+
+Incorrect:
+"There is a <0.1% probability that H₀ is true."
+
+Correct:
+"Assuming H₀ is true, a result this extreme would be very unlikely."
+
+## Stage 7 — Train/Test Evaluation
+
+### Q1. Why use a train/test split?
+
+**Answer:**
+To evaluate how well the model generalizes to unseen observations.
+
+### Q2. Why not evaluate on training data?
+
+**Answer:**
+The model has already seen the training observations, so training
+performance can be overly optimistic.
+
+### Q3. What does the test set tell us?
+
+**Answer:**
+It provides an estimate of out-of-sample predictive performance.
+
+### Q4. What metrics did we use?
+
+- MAE → average absolute prediction error
+- MSE → squared error; penalizes large errors more
+- RMSE → prediction error in Sales units
+- R² → proportion of target variation explained by the model
+
+### Important distinction
+
+Statistical significance → evidence about a coefficient
+
+Test-set evaluation → predictive generalization
+
+## Stage 8 — Multiple Linear Regression
+
+### Q1. Why did multiple regression improve performance?
+
+**Answer:**
+TV alone could not capture all the information related to Sales.
+Adding Radio and Newspaper provided additional information and
+substantially improved predictive performance.
+
+Test performance:
+
+TV only:
+RMSE = 3.194
+R²   = 0.677
+
+All three:
+RMSE = 1.782
+R²   = 0.899
+
+### Q2. Why not keep adding variables?
+
+**Answer:**
+R² can increase as predictors are added, especially on training data.
+More variables can increase complexity and cause overfitting.
+
+Therefore, model selection should consider:
+- Test performance
+- Cross-validation
+- RMSE / MAE / R²
+- Statistical evidence
+- Diagnostics
+- Model simplicity
+
+### Q3. Interpret Radio coefficient = 0.1892
+
+**Answer:**
+Holding TV and Newspaper constant, a one-unit increase in Radio
+advertising expenditure is associated with an estimated 0.1892-unit
+increase in predicted Sales, on average.
+
+This is an association, not causation.
+
+### Q4. Interpret Newspaper coefficient = 0.0028, p = 0.696
+
+**Answer:**
+After accounting for TV and Radio, there is not strong statistical
+evidence of a linear association between Newspaper expenditure and Sales.
+
+The confidence interval includes zero.
+
+However, p-value alone should not determine feature selection.
+
+## Stage 9 — Cross-Validation
+
+### Q1. Why use cross-validation after train/test split?
+
+**Answer:**
+A single train/test split can produce split-dependent performance.
+Cross-validation evaluates the model across multiple validation folds
+and gives a more robust estimate of generalization performance.
+
+### Q2. What does mean CV RMSE represent?
+
+**Answer:**
+The average validation RMSE across the folds.
+
+It estimates typical prediction error on unseen validation observations.
+
+### Q3. What does CV standard deviation represent?
+
+**Answer:**
+How much model performance varies across the validation folds.
+
+### Q4. Can CV RMSE guarantee real-world performance?
+
+**Answer:**
+No.
+
+It is an estimate based on the available dataset. Future real-world
+performance can differ because of sampling variation, dataset size,
+data distribution, and other factors.
+
+### Our result
+
+TV + Radio:
+Mean CV RMSE = 1.663
+
+TV + Radio + Newspaper:
+Mean CV RMSE = 1.682
+
+Therefore, Newspaper did not provide meaningful predictive improvement
+in our cross-validation comparison.
+
+### Key distinction
+
+Train/test split → one holdout estimate
+
+Cross-validation → multiple validation estimates
+
+Neither guarantees future real-world performance.

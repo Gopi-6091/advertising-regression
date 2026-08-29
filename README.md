@@ -602,9 +602,7 @@ Status: ✅ Complete
 
 Phase 5 — Regression
 
-Status: 🟡 In Progress
-
-Completed:
+Status: ✅ Complete
 
     Simple linear regression
     Regression equation
@@ -619,18 +617,12 @@ Completed:
     Multiple linear regression
     Train/test evaluation
     OLS multiple regression
-
-Remaining:
-
-    Fully interpret multiple regression coefficients
-    Assess whether Newspaper should remain in the model
-    Compare models more rigorously
+    Statistical interpretation of predictors
+    Model comparison
 
 Phase 6 — Model Evaluation
 
-Status: 🟡 In Progress
-
-Completed:
+Status: ✅ Complete
 
     Train/test split
     Test predictions
@@ -640,48 +632,78 @@ Completed:
     R²
     Train/test comparison
     Simple vs multiple regression comparison
+    Cross-validation
+    Mean CV RMSE comparison
+    CV RMSE variability using standard deviation
+    TV + Radio vs TV + Radio + Newspaper comparison
+
+Current model preference:
+
+TV + Radio is currently preferred because it achieved slightly better cross-validated predictive performance while using fewer predictors.
+Phase 7 — Diagnostics
+
+Status: ✅ Complete
+
+    Residual distribution
+    Residuals vs fitted values
+    Q-Q plot
+    Linearity assessment
+    Homoscedasticity assessment
+    Breusch-Pagan test
+    Multicollinearity
+    VIF
+    Influential observations
+    Cook's distance
+    Investigation of influential observations
+    Regression assumption assessment
+
+Current diagnostic conclusion:
+
+No major regression assumption violations were identified. Some tail deviations, possible mild curvature, and influential observations remain important limitations to acknowledge.
+Phase 8 — Business Interpretation
+
+Status: 🟡 In Progress
 
 Remaining:
 
-    Cross-validation
-    More robust model comparison
-
-Phase 7 — Diagnostics
-
-Status: ⬜ Not Started
-
-    Linearity
-    Independence
-    Homoscedasticity
-    Residual analysis
-    Normality where relevant
-    Multicollinearity
-    VIF
-    Outliers
-    Influential observations
-
-Phase 8 — Business Interpretation
-
-Status: ⬜ Not Started
-
-    Translate model results into business language
+    Translate regression coefficients into business language
     Compare advertising channels
-    Assess predictive usefulness
-    Discuss budget decisions
-    Discuss prediction vs optimization
-    Discuss correlation vs causation
-    Discuss limitations
+    Interpret predictive usefulness
+    Explain what the model can and cannot tell the business
+    Distinguish prediction from causation
+    Discuss whether the model can support budget decisions
+    Explain why prediction does not automatically provide optimal budget allocation
 
-Phase 9 — Portfolio & Interview
+Phase 9 — Interview & Hiring-Manager Preparation
 
 Status: ⬜ Not Started
 
-    Final notebook
-    Final README
-    Business presentation
-    Hiring-manager questions
-    Strong interview answers
-    Real-world improvements
+Planned:
+
+    Technical interview questions
+    Statistical reasoning questions
+    ML/modeling questions
+    Business questions
+    Explain model-selection decisions
+    Defend assumptions and limitations
+    Practice explaining the project without relying on the notebook
+
+Phase 10 — Business Storytelling & Presentation
+
+Status: ⬜ Not Started
+
+Planned:
+
+    Convert the analysis into a clear business story
+    Create a concise project presentation
+    Explain the problem → analysis → findings → model → validation → business implications
+    Highlight key findings rather than walking through every code cell
+    Clearly communicate model limitations
+    Prepare a 5–7 minute portfolio presentation
+    Create a hiring-manager-friendly project narrative
+    Develop a final recommendation supported by evidence
+    Connect the technical results back to the original business question
+
 
 22. Mentor Instructions
 
@@ -730,16 +752,93 @@ Question → Data → Assumptions → Method → Evidence → Interpretation
 The objective is not to finish the project quickly.
 
 The objective is to become capable of defending every important analytical decision.
+
 24. Current Checkpoint
 
-Data Audit & Cleaning ✅ → EDA ✅ → Simple Regression + Hypothesis Testing ✅ → Train/Test Evaluation ✅ → Multiple Regression ✅ → OLS Statistical Analysis ✅ → Cross-Validation 🔵 → Diagnostics ⬜
+Data Audit & Cleaning ✅ → EDA ✅ → Simple Regression + Hypothesis Testing ✅ → Train/Test Evaluation ✅ → Multiple Regression ✅ → OLS Statistical Analysis ✅ → Cross-Validation ✅ → Diagnostics ✅ → Business Interpretation 🔵
 
+Current Position
 
-One important change I made deliberately: **Cross-validation is now the next step before we finalize the multiple-regression model.** We shouldn't jump straight to diagnostics yet, because we've already recognized that our current comparison depends on one random split.
+The regression analysis and model evaluation are now complete.
 
-The next session can therefore start exactly here:
+The current preferred model is TV + Radio, based on slightly better cross-validated RMSE and greater simplicity compared with the model including Newspaper.
 
-> **Why should we use cross-validation when we already have a train/test split?**
+Diagnostics were also completed, including residual analysis, Q-Q plot, VIF, Cook's distance, and the Breusch-Pagan test.
+
+Next Session
+
+The next session will focus on:
+
+Business Interpretation — turning the statistical findings into a clear business story and recommendation.
+
+This will be followed by interview preparation and the final project presentation/storytelling.
 
 That will connect directly to the concern you raised earlier about different random splits producing different RMSE values.
 
+                 BUSINESS QUESTION
+                        │
+                        ▼
+       Does advertising expenditure
+          relate to / predict Sales?
+                        │
+                        ▼
+                    EDA
+             ┌──────────┼──────────┐
+             ▼          ▼          ▼
+            TV        Radio     Newspaper
+             │          │          │
+          strong     moderate     weak
+          positive   positive    positive
+             │          │          │
+             └──────────┼──────────┘
+                        ▼
+              SIMPLE REGRESSION
+                  TV → Sales
+                        │
+                        ▼
+             coefficient = 0.0475
+                        │
+                        ▼
+                Is β ≠ 0 ?
+                        │
+                        ▼
+                 p < 0.001
+                        │
+                        ▼
+             evidence of association
+                        │
+                        ▼
+              MULTIPLE REGRESSION
+                        │
+            ┌───────────┼───────────┐
+            ▼           ▼           ▼
+           TV         Radio      Newspaper
+         0.0447       0.1892       0.0028
+           ✓            ✓             ?
+                                      │
+                                 p = 0.696
+                                      │
+                                      ▼
+                           weak statistical evidence
+                        │
+                        ▼
+               TRAIN / TEST EVALUATION
+                        │
+                        ▼
+                  unseen data
+                        │
+                        ▼
+                 RMSE / R² / MAE
+                        │
+                        ▼
+               CROSS-VALIDATION
+                        │
+              ┌─────────┴─────────┐
+              ▼                   ▼
+          TV + Radio       All 3 variables
+          RMSE 1.663        RMSE 1.682
+              │                   │
+              └─────────┬─────────┘
+                        ▼
+               TV + Radio slightly
+               preferred for now

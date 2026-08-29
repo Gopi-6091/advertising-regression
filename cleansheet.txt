@@ -1,0 +1,129 @@
+                 BUSINESS QUESTION
+                        │
+                        ▼
+       Does advertising expenditure
+          relate to / predict Sales?
+                        │
+                        ▼
+                    EDA
+             ┌──────────┼──────────┐
+             ▼          ▼          ▼
+            TV        Radio     Newspaper
+             │          │          │
+          strong     moderate     weak
+          positive   positive    positive
+             │          │          │
+             └──────────┼──────────┘
+                        ▼
+              SIMPLE REGRESSION
+                  TV → Sales
+                        │
+                        ▼
+             coefficient = 0.0475
+                        │
+                        ▼
+                Is β ≠ 0 ?
+                        │
+                        ▼
+                 p < 0.001
+                        │
+                        ▼
+             evidence of association
+                        │
+                        ▼
+              MULTIPLE REGRESSION
+                        │
+            ┌───────────┼───────────┐
+            ▼           ▼           ▼
+           TV         Radio      Newspaper
+         0.0447       0.1892       0.0028
+           ✓            ✓             ?
+                                      │
+                                 p = 0.696
+                                      │
+                                      ▼
+                           weak statistical evidence
+                        │
+                        ▼
+               TRAIN / TEST EVALUATION
+                        │
+                        ▼
+                  unseen data
+                        │
+                        ▼
+                 RMSE / R² / MAE
+                        │
+                        ▼
+               CROSS-VALIDATION
+                        │
+              ┌─────────┴─────────┐
+              ▼                   ▼
+          TV + Radio       All 3 variables
+          RMSE 1.663        RMSE 1.682
+              │                   │
+              └─────────┬─────────┘
+                        ▼
+               TV + Radio slightly
+               preferred for now
+
+
+
+Correlation
+    ↓
+Association between variables
+
+Regression coefficient
+    ↓
+Estimated relationship while holding
+other predictors constant
+
+p-value
+    ↓
+Statistical evidence about coefficient
+
+RMSE / MAE / R²
+    ↓
+Predictive performance
+
+Cross-validation
+    ↓
+More robust estimate of generalization
+
+Causation
+    ↓
+NOT established by this observational dataset
+
+
+                 DATA
+                   ↓
+                  EDA
+                   ↓
+          Is linear regression
+             reasonable?
+                   ↓
+               MODEL
+                   ↓
+        ┌──────────┴──────────┐
+        ↓                     ↓
+   INFERENCE             PREDICTION
+        ↓                     ↓
+ coefficient              RMSE
+ t-statistic              MAE
+ p-value                  R²
+ CI                       CV
+        ↓                     ↓
+        └──────────┬──────────┘
+                   ↓
+              DIAGNOSTICS
+                   ↓
+            MODEL SELECTION
+                   ↓
+          BUSINESS INTERPRETATION
+
+Before you join, keep these 5 anchors in your head:
+
+    Business: Understand whether advertising spend is associated with Sales and whether the model can predict Sales.
+    EDA: TV and Radio showed stronger relationships with Sales; Newspaper was weaker.
+    Statistics: Coefficients describe associations; t-tests/p-values help assess evidence that coefficients differ from zero.
+    Prediction: RMSE/MAE/R² evaluate predictive performance on unseen data.
+    Validation: Cross-validation gives a more robust estimate than relying on one train/test split.
