@@ -1,0 +1,123 @@
+Next Stage: Business Interpretation
+
+We'll wrap the project in this order:
+
+    Final model selection
+        Confirm why TV + Radio is preferred.
+        Compare it with the 3-variable model.
+
+    Business interpretation
+        What do the TV and Radio coefficients actually mean?
+        Which channel has the stronger association?
+        Be careful not to turn coefficients into causal claims.
+
+    Prediction vs optimization
+        Explain why our model can predict sales but doesn't automatically tell the company its optimal advertising budget.
+
+    Limitations
+        Observational data
+        Only 200 observations
+        Sampling limitations
+        Influential observations
+        Possible mild curvature/tail deviations
+        No causal conclusions
+
+    Final notebook conclusion
+        Business question → findings → model → evidence → limitations.
+
+    Portfolio README
+        Turn everything we've done into a clean hiring-manager-friendly project.
+
+Let's start with the most important one:
+
+Final model selection.
+
+Our evidence currently says:
+Model	CV RMSE
+TV + Radio	~1.663
+TV + Radio + Newspaper	~1.682
+
+And Newspaper:
+
+    has p = 0.696
+    has a modest VIF = 3.06
+    doesn't improve cross-validated RMSE
+    adds complexity without meaningful predictive improvement
+
+So our current conclusion is:
+
+    TV + Radio is the preferred model because it provides slightly better cross-validated predictive performance while being simpler, and Newspaper provides little additional evidence or predictive value.
+
+Before we write the final conclusion, I'd like you to explain this in your own words, just like you'd answer a hiring manager:
+
+    "Why did you choose TV + Radio instead of TV + Radio + Newspaper?"
+
+
+
+
+
+ Phase 8 — Business Interpretation Note Card
+1. What did we observe?
+
+    TV: strong positive association with Sales.
+    Radio: positive association with Sales.
+    Newspaper: weak association with Sales.
+    In multiple regression:
+        TV coefficient ≈ 0.0447, p < 0.001
+        Radio coefficient ≈ 0.1892, p < 0.001
+        Newspaper coefficient ≈ 0.0028, p = 0.696
+
+2. What do the coefficients mean?
+
+Sales^=2.9791+0.0447(TV)+0.1892(Radio)+0.0028(Newspaper)
+
+    A coefficient describes the change in predicted Sales for a 1-unit increase in that predictor, holding the other predictors constant.
+    Coefficient ≠ correlation.
+    A larger coefficient does not automatically mean greater business importance because scale and spending ranges matter.
+
+3. What does the model tell the business?
+
+    TV and Radio provide useful predictive information about Sales.
+    Newspaper adds little evidence of an independent linear relationship after accounting for TV and Radio.
+    TV + Radio is currently preferred because it has:
+        slightly better cross-validated RMSE (~1.663)
+        fewer predictors
+        simpler interpretation.
+
+4. What does RMSE tell us?
+
+    CV RMSE ≈ 1.663 sales units.
+    Predictions will not exactly match actual Sales.
+    Individual errors can be positive or negative.
+    RMSE represents the typical magnitude of prediction error and is always non-negative.
+
+5. Can we use the model for budget decisions?
+
+Yes — cautiously.
+
+We can plug different TV/Radio spending combinations into the equation to perform scenario analysis and estimate predicted Sales.
+
+But:
+
+    Scenario prediction ≠ optimal budget allocation.
+
+6. Why can't we claim an optimal budget?
+
+The data is observational, so regression does not establish that changing advertising spending causes the predicted sales change.
+
+True budget optimization would require additional information/evidence about:
+
+    causal effects
+    total budget constraints
+    channel costs
+    diminishing returns/non-linearity
+    profitability/margins
+    business constraints
+
+7. Final business recommendation
+
+    The analysis supports prioritizing TV and Radio as useful predictors of Sales, with Newspaper providing limited additional predictive/statistical evidence. The TV + Radio model can support sales prediction and advertising-spend scenario analysis, but it should not be used alone to claim causal effects or determine the optimal advertising budget. Further causal and economic analysis would be required for budget optimization.
+
+🎯 Interview one-liner
+
+    “Our model tells us which advertising variables are useful for predicting sales and allows us to evaluate spending scenarios, but because the data is observational, prediction does not establish causation and the regression alone cannot determine the optimal advertising allocation.”

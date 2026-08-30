@@ -1,0 +1,318 @@
+Phase 10 — Business Storytelling & Presentation
+
+The goal is not to present every notebook cell.
+
+A hiring manager should understand your project in roughly this sequence:
+
+Business problem → Data → Evidence → Model → Validation → Finding → Business implication → Limitation
+
+1. The 30-second project story
+
+If someone asks:
+
+“Tell me about your Advertising Regression project.”
+
+You should eventually be able to say:
+
+I analyzed advertising expenditure across TV, Radio, and Newspaper to understand their relationship with product sales and build a model for predicting sales. I first audited and explored the data, then developed simple and multiple linear regression models and evaluated them using train/test metrics and cross-validation. TV and Radio provided strong predictive and statistical evidence, while Newspaper added little additional value. The final TV + Radio model achieved a cross-validated RMSE of about 1.66 sales units, but because the data is observational, I treat the results as predictive associations rather than causal effects or a direct solution for optimal budget allocation.
+
+That's your project elevator pitch.
+
+2. The 5–7 minute presentation structure
+
+I recommend approximately 8 slides.
+
+Slide 1 — Business Problem
+
+Title:
+
+Advertising Spend and Sales: Regression Analysis
+
+Explain:
+
+Company invests in TV, Radio, Newspaper.
+Business wants to understand how advertising relates to Sales.
+Analytical goal: predict Sales.
+Business goal: provide evidence that may support advertising decisions.
+
+Important: Immediately state:
+
+This is observational data, so the analysis estimates associations rather than causal effects.
+
+Slide 2 — Data Understanding & Quality
+
+Show:
+
+200 observations
+TV
+Radio
+Newspaper
+Sales
+Unnamed: 0 identified as an index/identifier
+
+Then briefly mention:
+
+No missing values
+No duplicate rows
+No obvious data-entry errors
+Potential Newspaper outliers investigated and retained
+
+Don't spend two minutes on cleaning.
+
+The message is:
+
+“I verified that the data was suitable for analysis before modeling.”
+
+3. EDA — What did we discover?
+
+This should be a visual slide.
+
+Show:
+
+Sales vs TV
+Sales vs Radio
+Sales vs Newspaper
+
+Your story:
+
+TV showed the strongest visual relationship with Sales, Radio showed a moderate positive relationship, and Newspaper showed a substantially weaker relationship.
+
+Then show the correlation values:
+
+Predictor	Sales correlation
+TV	0.782
+Radio	0.576
+Newspaper	0.228
+
+And immediately add:
+
+Correlation describes linear association, not causation.
+
+4. Modeling Strategy
+
+Don't simply say:
+
+"I ran linear regression."
+
+Show the progression.
+
+Model 1
+
+TV → Sales
+
+Purpose:
+
+Understand one predictor before introducing multiple predictors.
+
+Then:
+
+Model 2
+
+TV + Radio + Newspaper → Sales
+
+Purpose:
+
+Evaluate the combined predictive relationship.
+
+Then:
+
+Model selection
+
+Cross-validation compared:
+
+TV + Radio
+TV + Radio + Newspaper
+
+Result:
+
+Model	CV RMSE
+TV + Radio	1.663
+TV + Radio + Newspaper	1.682
+
+Therefore:
+
+TV + Radio was preferred because it performed slightly better while remaining simpler.
+
+This is a very good modeling story because you aren't saying:
+
+"Newspaper had a high p-value, therefore I deleted it."
+
+You're showing that statistical evidence + predictive performance + simplicity informed the decision.
+
+5. Statistical Evidence
+
+This is where you demonstrate that you're more than someone who simply knows LinearRegression().
+
+Show the multiple regression coefficients:
+
+Predictor	Coefficient	p-value
+TV	0.0447	<0.001
+Radio	0.1892	<0.001
+Newspaper	0.0028	0.696
+
+Explain:
+
+TV has statistically significant positive association.
+Radio has statistically significant positive association.
+Newspaper does not provide statistically significant evidence of an independent linear association after accounting for TV and Radio.
+
+Then say:
+
+Statistical significance and predictive usefulness are related but different questions.
+
+That's an excellent interview signal.
+
+6. Model Validation & Diagnostics
+
+This slide answers:
+
+“How do you know your model isn't just giving you a nice-looking equation?”
+
+Show:
+
+Predictive validation
+Train/test evaluation
+Cross-validation
+RMSE
+MAE
+R²
+
+Current preferred model:
+
+CV RMSE ≈ 1.663 sales units
+
+Diagnostics
+
+You investigated:
+
+residual distribution
+residuals vs fitted
+Q-Q plot
+Breusch-Pagan
+VIF
+Cook's distance
+
+Overall:
+
+No major regression assumption violations were identified, although some tail deviations, possible mild curvature, and influential observations remain limitations.
+
+This demonstrates model skepticism, which is valuable.
+
+7. Business Findings
+
+Now stop talking about statistics.
+
+Talk like a data scientist advising the business.
+
+Finding 1
+
+TV and Radio are useful predictors of Sales.
+
+Finding 2
+
+Newspaper provides limited additional evidence once TV and Radio are included.
+
+Finding 3
+
+TV + Radio provides slightly better cross-validated predictive performance with fewer predictors.
+
+Finding 4
+
+The model can be used for sales prediction and spending scenarios.
+
+But:
+
+It does not establish that increasing advertising spending will causally increase Sales.
+
+8. Recommendation & Limitations
+
+This is arguably the most important slide.
+
+Recommendation
+
+Use the TV + Radio model as a predictive/scenario-analysis tool, not as a standalone budget-optimization system.
+
+For example, the business could ask:
+
+"Given this proposed TV and Radio spending combination, what Sales does the model predict?"
+
+But we should not conclude:
+
+"The optimal budget is X% TV and Y% Radio."
+
+Why?
+
+Because optimization requires additional information:
+
+causal effects
+spending constraints
+channel costs
+diminishing returns
+profit margins
+business objectives
+The complete story
+
+Your entire project can now be reduced to this chain:
+
+BUSINESS QUESTION
+        ↓
+Does advertising expenditure help explain/predict Sales?
+        ↓
+DATA AUDIT
+        ↓
+Clean, complete dataset
+        ↓
+EDA
+        ↓
+TV strongest
+Radio moderate
+Newspaper weak
+        ↓
+REGRESSION
+        ↓
+TV + Radio + Newspaper
+        ↓
+STATISTICAL EVIDENCE
+        ↓
+TV ✓
+Radio ✓
+Newspaper ?
+        ↓
+CROSS-VALIDATION
+        ↓
+TV + Radio slightly better
+        ↓
+DIAGNOSTICS
+        ↓
+No major assumption violations
+        ↓
+BUSINESS INTERPRETATION
+        ↓
+TV + Radio are useful predictors
+        ↓
+PREDICTION
+        ↓
+Can estimate Sales for spending scenarios
+        ↓
+LIMITATION
+        ↓
+Association ≠ causation
+Prediction ≠ optimization
+        ↓
+RECOMMENDATION
+        ↓
+Use model for prediction/scenario analysis;
+do not use it alone for optimal budget allocation.
+
+The hiring-manager version
+
+If I were evaluating this project, the strongest thing isn't:
+
+“I achieved an R² of 0.899.”
+
+It's this:
+
+“I started with a business question, investigated the data, formed hypotheses, built progressively more complex models, evaluated them on unseen data and through cross-validation, checked regression assumptions, and then translated the statistical findings into a business recommendation while explicitly identifying what the model cannot establish.”
+
+That is the data-science story.
+

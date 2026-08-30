@@ -1,0 +1,210 @@
+Interview Question 1
+
+“Tell me about your Advertising Regression project.”
+
+Strong 60-second answer
+
+“I worked on an advertising regression project using data from 200 markets, with TV, Radio, and Newspaper advertising expenditure as predictors and Sales as the target. The objective was to understand the relationship between advertising expenditure and sales and build a model that could predict sales.
+
+I started with data auditing and exploratory analysis, then built a simple TV regression before moving to multiple linear regression. I evaluated the models using train/test metrics and cross-validation, and also checked regression assumptions using residual analysis, Breusch-Pagan, VIF, and Cook's distance.
+
+TV and Radio showed strong statistical evidence of positive associations with Sales, while Newspaper added little additional predictive value. The TV + Radio model was preferred because it achieved slightly better cross-validated RMSE of about 1.66 while using fewer predictors.
+
+However, because the data is observational, I would treat these results as associations and use the model for prediction or scenario analysis rather than claiming causal effects or directly determining the optimal advertising budget.”
+
+Why this is a strong answer
+
+Notice that it doesn't just say:
+
+“I built a regression model and got R² = 0.89.”
+
+It demonstrates the entire data-science workflow:
+
+Problem → Data → EDA → Modeling → Validation → Diagnostics → Business interpretation → Limitation
+
+That's what makes the project portfolio-worthy.
+
+Interview Question 2 — Why Linear Regression?
+
+Now imagine the interviewer asks:
+
+“Why did you choose linear regression for this problem? Why not a decision tree, random forest, or another machine-learning algorithm?”
+
+This is a very common question.
+
+A weak answer would be:
+
+“Because the dataset is simple.”
+
+A stronger answer needs to discuss the business question, interpretability, assumptions, and the relationship observed in EDA.
+
+What I would expect you to reason about
+
+Think about:
+
+What did our scatterplots suggest?
+What was the analytical objective?
+Did we need interpretability?
+What does linear regression allow us to do that a black-box model might not?
+Does choosing linear regression mean we believe the relationship is perfectly linear?
+
+I'll give you the interview-ready answer next, but first consider the key idea:
+
+We didn't choose linear regression merely because the dataset was small. We chose it because it was an appropriate, interpretable baseline for the observed relationships and business question.
+
+Strong answer
+
+“I chose linear regression because the initial EDA showed approximately linear relationships between the main predictors and Sales, and an important part of the business objective was understanding the relationship between advertising expenditure and Sales, not just maximizing predictive accuracy. Linear regression provides interpretable coefficients, confidence intervals, and statistical tests, which make it useful for explaining the associations to a business stakeholder. I also validated the model using cross-validation and regression diagnostics rather than assuming that linear regression was appropriate simply because the scatterplots looked reasonable. More complex models could certainly be compared later if the objective were primarily predictive performance.”
+
+Interview Question 3 — Why did you build simple regression first?
+
+The interviewer follows up:
+
+“You had three predictors available. Why didn't you immediately build the multiple regression model?”
+
+This is testing whether your workflow had a reason, rather than being a sequence of commands.
+
+A strong answer:
+
+“I started with simple linear regression using TV and Sales to establish the basic relationship between one predictor and the target. This allowed me to understand the slope, intercept, statistical significance, residual behavior, and predictive performance in a simpler setting before introducing multiple predictors. I then moved to multiple regression because the business problem involves several advertising channels simultaneously.”
+
+The deeper lesson
+
+Simple regression wasn't the final model.
+
+It was a learning and analytical step.
+
+That distinction is important.
+
+Interview Question 4 — Correlation vs Regression
+
+Now the interviewer gets more technical:
+
+“You reported a TV–Sales correlation of 0.782. Why didn't you just use correlation instead of regression?”
+
+Your answer should distinguish the two.
+
+Strong answer
+
+“Correlation measures the strength and direction of the linear association between two variables, whereas regression allows us to model the target as a function of one or more predictors. In multiple regression, I can estimate the association between one advertising channel and Sales while holding the other channels constant, and I can also generate predictions. So correlation was useful during EDA, but it wasn't sufficient for the modeling objective.”
+
+And remember:
+
+Correlation coefficient ≠ regression coefficient.
+
+That's a distinction you should be able to explain instantly.
+
+Interview Question 5 — The coefficient challenge
+
+Now here's the one we discussed earlier.
+
+The interviewer asks:
+
+“Radio has a coefficient of 0.1892 while TV has a coefficient of 0.0447. Does that mean Radio is more effective than TV?”
+
+Strong answer
+
+“Not necessarily. The coefficients represent the expected change in predicted Sales for a one-unit change in each predictor while holding the other predictors constant, but the predictors may have different measurement scales and ranges. Therefore, comparing the raw coefficient magnitudes alone isn't sufficient to determine which channel is more important or more effective. I would consider the coefficient estimates together with their uncertainty, the spending distributions, predictive contribution, business costs, and—if the goal is budget allocation—causal and economic evidence.”
+
+That's a very strong interview answer.
+
+Interview Question 6 — The causation trap
+
+The interviewer now says:
+
+“Your model says TV has a positive coefficient. Can the company conclude that increasing TV advertising will increase sales?”
+
+Your answer should be immediate:
+
+“No. The data is observational, so the regression identifies an association rather than a causal effect. A positive coefficient means that, conditional on the other variables in the model, higher TV expenditure is associated with higher predicted Sales. Establishing that increasing TV spending actually causes additional Sales would require a causal identification strategy, such as an appropriate experiment or stronger observational design.”
+
+That's one of the most important answers in this entire project.
+
+Interview Question 7 — Why Newspaper?
+
+Now the interviewer asks:
+
+“Newspaper has a p-value of 0.696. Why didn't you immediately remove it?”
+
+This is where your project becomes more sophisticated.
+
+Strong answer
+
+“A high p-value indicates that the model doesn't provide strong statistical evidence that the Newspaper coefficient differs from zero after accounting for TV and Radio. However, statistical significance alone shouldn't automatically determine feature selection. I also considered predictive performance, cross-validation, model simplicity, and diagnostics. In our cross-validation comparison, the TV + Radio model actually performed slightly better and was simpler, which supported preferring that model.”
+
+Notice the reasoning:
+
+p-value → investigate → cross-validation → simplicity → decision
+
+Not:
+
+p-value > 0.05 → delete variable.
+
+Interview Question 8 — Why Cross-Validation?
+
+The interviewer asks:
+
+“You already had a train/test split. Why did you need cross-validation?”
+
+Strong answer
+
+“A single train/test split gives us one estimate of out-of-sample performance, but that estimate can depend on which observations happened to fall into the training and test sets. Cross-validation evaluates the model across multiple train/validation splits, giving us a more robust estimate of expected predictive performance and some indication of variability. This was particularly relevant because we had already observed that different random splits could produce different RMSE values.”
+
+And this connects directly to the concern you raised earlier.
+
+Interview Question 9 — Why not optimize the advertising budget?
+
+This is the final major business question.
+
+“Your model predicts Sales. Why can't you simply use the regression equation to find the TV and Radio budget that maximizes Sales?”
+
+Strong answer
+
+“Because prediction and optimization are different problems. The regression equation can estimate predicted Sales for specified spending levels, but maximizing that equation doesn't necessarily identify a real-world optimal budget. The data is observational, so the coefficients aren't necessarily causal effects, and the model also doesn't incorporate factors such as advertising costs, profit margins, budget constraints, or diminishing returns. We would need additional causal and economic assumptions before using the model for genuine budget optimization.”
+
+That answer demonstrates business maturity, not just statistical knowledge.
+
+Your project in interview form
+
+At this point, you should be able to defend the project through this chain:
+
+Why this business problem?
+        ↓
+Why this dataset?
+        ↓
+Why clean/audit first?
+        ↓
+Why EDA?
+        ↓
+Why linear regression?
+        ↓
+Why simple regression first?
+        ↓
+Why multiple regression?
+        ↓
+What do coefficients mean?
+        ↓
+Coefficient ≠ correlation
+        ↓
+Statistical significance
+        ↓
+Prediction ≠ inference
+        ↓
+Why train/test?
+        ↓
+Why cross-validation?
+        ↓
+Why diagnostics?
+        ↓
+Why TV + Radio?
+        ↓
+Why not Newspaper?
+        ↓
+Association ≠ causation
+        ↓
+Prediction ≠ optimization
+        ↓
+What can the business actually do?
+
+
+
